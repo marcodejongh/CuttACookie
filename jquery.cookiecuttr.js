@@ -22,7 +22,7 @@
 
  */
 (function ($) {
-    $.cuttaCookie = function (options) {
+    $.cuttACookie = function (options) {
         var defaults = {
             cookieCutter                    : false, // you'd like to enable the div/section/span etc. hide feature? change this to true
             cookieCutterDeclineOnly         : false, // you'd like the CookieCutter to only hide when someone has clicked declined set this to true
@@ -57,7 +57,8 @@
             cookieDeclineValue              : 'cc_cookie_decline'
             cookieClickableOverlay			: false,
 			cookieClickableDiv				: "",
-			cookieClickAnyLink				: false
+			cookieClickAnyLink				: false,
+			cookieCuttrCompatible			: false
         };
 
         options               = $.extend({}, defaults, options);
@@ -204,8 +205,8 @@
         $('.cc-cookies-error a.cc-cookie-accept').click(acceptCookies);
     };
 
-    // drop-in replacement compatibility for the cookieCuttr plugin (from which cuttaCookie was forked)
-    if (!$.cookieCuttr)
-        $.cookieCuttr = $.cuttaCookie;
+    // drop-in replacement compatibility for the cookieCuttr plugin (from which cuttACookie was forked)
+    if (options.cookieCuttrCompatible && !$.cookieCuttr)
+        $.cookieCuttr = $.cuttACookie;
 
 })(jQuery);
