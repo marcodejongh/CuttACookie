@@ -1,7 +1,8 @@
-CookieCuttr
+CuttACookie
 ===========
 
 A tailorable jQuery plugin to deal with the EU Cookie Law.
+This project is for the continueing development of https://github.com/weare2ndfloor/cookieCuttr, weare2ndfloor has stopped development on the project.
 
 Dependencies
 ------------
@@ -78,17 +79,13 @@ Read More About EU Cookie Law
 * [New EU cookie law (e-Privacy Directive)](http://www.ico.gov.uk/for_organisations/privacy_and_electronic_communications/the_guide/cookies.aspx)
 * [Cookies – Doing nothing isn't the right answer](http://chriswharton.me/2012/05/cookies-doing-nothing-isnt-the-right-answer/)
 
-Using WordPress?
-----------------
-
-A Wordpress version is available [here](http://cookiecuttr.com/wordpress-plugin/).
 
 Options
 -------
 
-For options, see the [WIKI](/weare2ndfloor/cookieCuttr/wiki/Options).
+Documentation following soon, most features are described in the origins wiki [WIKI](/weare2ndfloor/cookieCuttr/wiki/Options).
 
-Contributing to CookieCuttr
+Contributing to CuttACookie
 ---------------------------
 
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
@@ -101,8 +98,10 @@ Contributing to CookieCuttr
 Credits
 -------
 
-* [weare2ndfloor](https://github.com/weare2ndfloor) for the plugin
+* [weare2ndfloor](https://github.com/weare2ndfloor) for starting up the project
 * [unsymbol](https://github.com/unsymbol) for organising the implementation txt into a readme markdown file
+* [marcodejongh](https://github.com/marcodejongh) improvements
+* [iamjochem](https://github.com/iamjochem) improvements
 
 Copyright
 ---------

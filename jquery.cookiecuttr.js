@@ -124,16 +124,6 @@
                         options.cookieDiscreetPosition == "bottomright"  ||
                         options.cookieDiscreetPosition == "bottomleft") ? 'append' : 'prepend';
 
-        var setDiscretePos = function(pos) {
-            //add appropriate CSS depending on position chosen
-            switch (pos) {
-                case 'topleft'    : $('div.cc-cookies').css({top: 0,    left: 0});  break;
-                case 'topright'   : $('div.cc-cookies').css({top: 0,    right: 0}); break;
-                case 'bottomleft' : $('div.cc-cookies').css({bottom: 0, left: 0});  break;
-                case 'bottomright': $('div.cc-cookies').css({bottom: 0, right: 0}); break;
-            }
-        };
-
         if ($cookieAccepted || $cookieDeclined) {
             // write cookie reset button
             if (options.cookieResetButton && options.cookieDiscreetReset) {
