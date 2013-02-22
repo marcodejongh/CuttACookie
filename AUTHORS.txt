@@ -1,0 +1,9 @@
+﻿jQuery CuttACookie Authors
+
+This software consists of voluntary contributions made by many
+individuals. For exact contribution history, see the revision history
+and logs, available at http://github.com/marcodejongh/CuttACookie
+
+Marco de Jongh
+Chris Wharton
+Jochem Maas
