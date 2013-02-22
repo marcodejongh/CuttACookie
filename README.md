@@ -3,7 +3,7 @@ CuttACookie
 
 A tailorable jQuery plugin to deal with the EU Cookie Law.
 This project is for the continuing development of https://github.com/weare2ndfloor/cookieCuttr, weare2ndfloor has stopped development on the project.
-The project will be kept functionally compatible to cookiecuttr, so replacing your existing cookiecuttr.js with ours will work right out of the box.
+The project will be kept functionally compatible to cookiecuttr, so replacing your existing cookiecuttr.js with ours will work if you set cookieCuttrCompatible in the options to true.
 
 Dependencies
 ------------
