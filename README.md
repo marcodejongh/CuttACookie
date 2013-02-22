@@ -2,7 +2,7 @@ CuttACookie
 ===========
 
 A tailorable jQuery plugin to deal with the EU Cookie Law.
-This project is for the continueing development of https://github.com/weare2ndfloor/cookieCuttr, weare2ndfloor has stopped development on the project.
+This project is for the continuing development of https://github.com/weare2ndfloor/cookieCuttr, weare2ndfloor has stopped development on the project.
 
 Dependencies
 ------------
