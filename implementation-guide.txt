@@ -1,4 +1,4 @@
-What is CookieCuttr?
+What is CuttACookie?
 ##########################
 
 NEW!! Due to further developments on the EU Cookie law, I've added a slightly softer option, an accept/decline message that you can display on just your policy page. You can use this on its own or in conjunction with a standard (or discreet) message on the rest of your website by combining the options below, take a look at the demos.
@@ -23,12 +23,6 @@ http://chriswharton.me/2012/05/cookies-doing-nothing-isnt-the-right-answer/
 To try and explain the impact of declining (or not accepting) cookies I've added the following on to my company website in the privacy policy:
 
 "PLEASE NOTE, not accepting the below cookies will severely harm our business, we will no longer be able to track visits to our website, see what the most popular pages are or devices looking at our website, it will be the equivalent of running a sweet shop, blindfolded with no stock-taking facility available."
-
-
-Using WordPress?
-##########################
-We also have a WordPress version at: http://cookiecuttr.com/wordpress-plugin/
-
 
 
 What do you need?
@@ -56,6 +50,10 @@ These files must all run BEFORE any other javascript on the page, I know some pe
 
 Add in the link to the CSS file underneath all of your other CSS files
 <link rel="stylesheet" href="cookiecuttr.css">
+
+if you'd like to support IE7 and IE8 include the following CSS file
+<link rel="stylesheet" href="cookiecuttr.ie8min.css">
+
 
 For any JavaScript you want to disable, you need to wrap the following if statement around it:
 if (jQuery.cookie('cc_cookie_accept') == "cc_cookie_accept") {
@@ -96,7 +94,7 @@ var s = document. getElementsByTagName('script')[0]; s.parentNode.insertBefore(g
 
 You just then need to call the function to run CookieCuttr - you can add this to your page, anywhere underneath the initial files you loaded in the head within the following code, the default setup will show the standard analytics message:
 $(document).ready(function () {
-$.cookieCuttr();
+$.cuttACookie();
 });
 
 You can also add this in to a central JavaScript file you may use to run your website.
@@ -117,19 +115,21 @@ Options
 
 I’ve added the following options within the plugin, these will give you ultimate control when deploying the plugin.
 
-cookieCutter - if you’d like to actively hide parts of your website set this to true, for example say you use a comments system that inserts cookies, you can put the div name in below to replace it with a cookie warning message.
+cookieCuttrCompatible - if you want to replace your current cookiecuttr implementation with CuttACookie set cookieCuttrCompatible to true in the options, and it should work out of the box.
+
+cookieCutter - if you'd like to actively hide parts of your website set this to true, for example say you use a comments system that inserts cookies, you can put the div name in below to replace it with a cookie warning message.
 
 cookieAnalytics - if you are just using a simple analytics package you can set this to true, it displays a simple default message with no privacy policy link - this is set to true by default.
 
-cookieDeclineButton - if you’d like a decline button to (ironically) write a cookie into the browser then set this to true.
+cookieDeclineButton - if you'd like a decline button to (ironically) write a cookie into the browser then set this to true.
 
 cookieAcceptButton - set this to true to hide the accept button, its set to false by default
 
-cookieResetButton - if you’d like a reset button to delete the accept or decline cookies then set this to true.
+cookieResetButton - if you'd like a reset button to delete the accept or decline cookies then set this to true.
 
 cookieOverlayEnabled - don't want a discreet toolbar? this makes the whole message into a 100% height
 
-cookiePolicyLink - if applicable, enter the link to your privacy policy in here - this is as soon as cookieAnalytics is set to false;
+cookiePolicyLink - if applicable, enter the link to your privacy policy in here - this is as soon as cookieAnalytics is set to false.
 
 cookieMessage - edit the message you want to appear in the cookie bar, remember to keep the {{cookiePolicyLink}} variable in tact so it inserts your privacy policy link.
 
@@ -137,7 +137,7 @@ cookieAnalyticsMessage - edit the message you want to appear, this is the defaul
 
 cookieWhatAreTheyLink - edit the link for the 'What are Cookies' link.
 
-cookieErrorMessage - edit the message you’d like to appear in place of the functionality
+cookieErrorMessage - edit the message you'd like to appear in place of the functionality
 
 cookieNotificationLocationBottom - this is false by default, change it to true and the cookie notification bar will show at the bottom of the page instead, please note this will remain at the top for mobile and iOS devices and Internet Explorer 6.
 
@@ -159,20 +159,29 @@ cookieDiscreetLink - false by default, set to true to enable
 
 cookieDiscreetLinkText - edit the text you want to appear on the discreet option.
 
-cookieDiscreetPosition - set to topleft by default, you can also set topright, bottomleft, bottomright. 
+cookieDiscreetPosition - set to topleft by default, you can also set topright, bottomleft, bottomright.
 
-cookieDomain - empty by default, add your domain name in here without www. or https:// or http:// to remove Google Analytics cookies on decline.    
+cookieDomain - empty by default, add your domain name in here without www. or https:// or http:// to remove Google Analytics cookies on decline.
 
+cookieAcceptName : Name of "cookies accepted" cookie, default is "cc_cookie_accept".
+
+cookieAcceptValue : Value of the "cookies accepted" cookie, default is "cc_cookie_accept".
+
+cookieDeclineName : Name of "cookies declined" cookie, default is "cc_cookie_decline".
+
+cookieDeclineValue : Value of the "cookies declined" cookie, default is "cc_cookie_decline".
+
+cookieClickableOverlay : empty by default, set true to add a div with a onclick event for accepting cookies.
+
+cookieClickableDiv : The id of a div to attach a accept onclick event to that div. Works in combination with cookieClickableOverlay. When empty a div "cc-cookies-bodywrapper" will be wrapped into the body.
+
+cookieClickAnyLink : false by default, when true a onclick will be added to all links inside the page. Any link clicked inside the page will be seen as cookie acceptance
 
 Implementing on a CMS?
 ##########################
 
 
 I’ve tested the above on WordPress and it works fine, obviously you only need to load the files that the CMS doesn’t use. I’ve found that if you implement the code in the <head> of the HTML and you are using a third party plugin (that you don’t want to start hacking apart) that the third party cookie is not stored in the browser. Be warned though, I’ve only tested this on my implementations and you need to test this on every website you implement.
-
-We also have a WordPress version at: http://cookiecuttr.com/wordpress-plugin/
-
-
 
 
 Demos

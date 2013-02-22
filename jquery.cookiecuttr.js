@@ -18,7 +18,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program. If not, see <http://gnu.org/licenses/>.
 
- Documentation available at http://cookiecuttr.com
+ Documentation available at https://github.com/marcodejongh/CuttACookie/wiki
 
  */
 (function ($) {
