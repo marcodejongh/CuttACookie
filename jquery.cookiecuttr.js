@@ -62,12 +62,64 @@
     };
     $.cuttACookie = function (o) {
 
-        var options = $.extend({}, defaults, o), 
-            $cookieAccepted = $.cookie(options.cookieAcceptName) == options.cookieAcceptValue, 
+        var options = $.extend({}, defaults, o),
+            $cookieAccepted = $.cookie(options.cookieAcceptName) == options.cookieAcceptValue,
             $cookieDeclined = $.cookie(options.cookieDeclineName) == options.cookieDeclineValue,
-            cookieAccept  = '',
+            cookieAccept = '',
             cookieDecline = '',
-            cookieOverlay = '';
+            cookieOverlay = '',
+            acceptCookies = function (elmt) {
+                if (!options.cookieClickAnyLink) {
+                    elmt.preventDefault();
+                }
+
+                $.cookie(options.cookieAcceptName, options.cookieAcceptValue, {
+                    expires: options.cookieExpires,
+                    path: '/'
+                });
+                $.cookie("cc_cookie_decline", null, {
+                    path: '/'
+                });
+                // reload page to activate cookies (overriden with clickanylink)
+                location.reload();
+            },
+            resetCookies = function (elmt) {
+                elmt.preventDefault();
+
+                $.cookie(options.cookieAcceptName, null, {
+                    path: '/'
+                });
+                $.cookie(options.cookieDeclineName, null, {
+                    path: '/'
+                });
+                $(".cc-cookies").fadeOut(function () {
+                    // reload page to activate cookies
+                    location.reload();
+                });
+            },
+            declineCookies = function (elmt) {
+                elmt.preventDefault();
+
+                if ($(this).is('[href$=#decline]')) {
+                    $.cookie(options.cookieAcceptName, null, { path: '/' });
+                    $.cookie(options.cookieDeclineName, options.cookieDeclineValue, { expires: options.cookieExpires, path: '/' });
+
+                    if (options.cookieDomain) {
+                        // kill google analytics cookies
+                        $.cookie("__utma", null, { domain: '.' + options.cookieDomain, path: '/' });
+                        $.cookie("__utmb", null, { domain: '.' + options.cookieDomain, path: '/' });
+                        $.cookie("__utmc", null, { domain: '.' + options.cookieDomain, path: '/' });
+                        $.cookie("__utmz", null, { domain: '.' + options.cookieDomain, path: '/' });
+                    }
+                } else {
+                    $.cookie(options.cookieDeclineName, null, { path: '/' });
+                    $.cookie(options.cookieAcceptName, options.cookieAcceptValue, { expires: options.cookieExpires, path: '/' });
+                }
+
+                $(".cc-cookies").fadeOut(function () {
+                    location.reload();
+                });
+            };
 
         options.cookieMessage = options.cookieMessage.replace('{{cookiePolicyLink}}', options.cookiePolicyLink);
 
@@ -75,47 +127,13 @@
         $.cookieAccepted = function () { return $cookieAccepted; };
         $.cookieDeclined = function () { return $cookieDeclined; };
 
-        var acceptCookies = function(elmt)
-        {
-			if(!options.cookieClickAnyLink)
-			{
-				elmt.preventDefault();
-			}
-			
-            $.cookie("cc_cookie_accept", "cc_cookie_accept", {
-                expires: options.cookieExpires,
-                path: '/'
-            });
-            $.cookie("cc_cookie_decline", null, {
-                path: '/'
-            });
-            // reload page to activate cookies
-            location.reload();
-		};
-		
-		var resetCookies = function (elmt) 
-		{
-            elmt.preventDefault();
-            $.cookie("cc_cookie_accept", null, {
-                path: '/'
-            });
-            $.cookie("cc_cookie_decline", null, {
-                path: '/'
-            });
-            $(".cc-cookies").fadeOut(function () {
-                // reload page to activate cookies
-                location.reload();
-            });
-        };
-
-		if (options.cookieAcceptButton)  // write cookie accept button
-		{
+        // write cookie accept button
+		if (options.cookieAcceptButton) {
             cookieAccept = ' <a href="#accept" class="cc-cookie-accept">' + options.cookieAcceptButtonText + '</a> ';
 		}
 
-
-		if (options.cookieDeclineButton) // write cookie decline button
-		{
+        // write cookie decline button
+		if (options.cookieDeclineButton) {
             cookieDecline = ' <a href="#decline" class="cc-cookie-decline">' + options.cookieDeclineButtonText + '</a> ';
 		}
 
@@ -142,7 +160,6 @@
                 $('div.cc-cookies').css("right", "0");
             }
 		};
-
 
         // to prepend or append, that is the question?
         var appOrPre = (options.cookieNotificationLocationBottom         ||
@@ -171,7 +188,6 @@
             }   
         }
         
-
         if ((options.cookieCutter && !options.cookieCutterDeclineOnly && ($cookieDeclined || !$cookieAccepted)) ||
             (options.cookieCutter && options.cookieCutterDeclineOnly && $cookieDeclined)){
             $(options.cookieDisable).html('<div class="cc-cookies-error">' + options.cookieErrorMessage + ' <a href="#accept" class="cc-cookie-accept">' + options.cookieAcceptButtonText + '</a> ' + '</div>');
@@ -183,10 +199,8 @@
             $('div.cc-cookies').css({ top: 'auto', bottom: 0 });
         }
 
-		if(options.cookieClickableOverlay && (!$cookieAccepted || $cookieDeclined))
-		{
-			if(options.cookieClickableDiv === "")
-			{
+		if(options.cookieClickableOverlay && (!$cookieAccepted || $cookieDeclined))	{
+			if(options.cookieClickableDiv === "") {
 				options.cookieClickableDiv = "cc-cookies-bodywrapper";
 				$('body').innerWrap("<div class='" + options.cookieClickableDiv + "'/>" );
 			}
@@ -194,35 +208,12 @@
 			$("." + options.cookieClickableDiv).click(acceptCookies);
 		}
 		
-		if(options.cookieClickAnyLink && !$cookieAccepted)
-		{
+		if(options.cookieClickAnyLink && !$cookieAccepted) {
 			$("a").click(acceptCookies);
 		}
         
         // handler: for [top/bottom] bar
-        $('.cc-cookie-accept, .cc-cookie-decline').click(function (e) {
-            e.preventDefault();
-
-            if ($(this).is('[href$=#decline]')) {
-                $.cookie(options.cookieAcceptName, null, { path: '/' });
-                $.cookie(options.cookieDeclineName, options.cookieDeclineValue, { expires: options.cookieExpires, path: '/'});
-
-                if (options.cookieDomain) {
-                    // kill google analytics cookies
-                    $.cookie("__utma", null, { domain: '.' + options.cookieDomain, path: '/' });
-                    $.cookie("__utmb", null, { domain: '.' + options.cookieDomain, path: '/' });
-                    $.cookie("__utmc", null, { domain: '.' + options.cookieDomain, path: '/' });
-                    $.cookie("__utmz", null, { domain: '.' + options.cookieDomain, path: '/' });
-                }
-            } else {
-                $.cookie(options.cookieDeclineName, null, { path: '/' });
-                $.cookie(options.cookieAcceptName, options.cookieAcceptValue, { expires: options.cookieExpires, path: '/' });
-            }
-
-            $(".cc-cookies").fadeOut(function () {
-                location.reload();
-            });
-        });
+		$('.cc-cookie-accept, .cc-cookie-decline').click(declineCookies);
 
         // handler: reset cookies
 		$('a.cc-cookie-reset').click(resetCookies);
@@ -232,8 +223,7 @@
     };
 
     // drop-in replacement compatibility for the cookieCuttr plugin (from which cuttACookie was forked)
-    if (defaults.cookieCuttrCompatible && !$.cookieCuttr)
-    { 
+    if (defaults.cookieCuttrCompatible && !$.cookieCuttr) {
         $.cookieCuttr = $.cuttACookie;
     }
 })(jQuery);
