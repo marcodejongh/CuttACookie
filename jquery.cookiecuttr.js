@@ -22,62 +22,61 @@
 
  */
 (function ($) {
-    $.cuttACookie = function (options) {
-        var defaults = {
-            cookieCutter                    : false, // you'd like to enable the div/section/span etc. hide feature? change this to true
-            cookieCutterDeclineOnly         : false, // you'd like the CookieCutter to only hide when someone has clicked declined set this to true
-            cookieAnalytics                 : true, // just using a simple analytics package? change this to true
-            cookieDeclineButton             : false, // this will disable non essential cookies
-            cookieAcceptButton              : true, // this will disable non essential cookies
-            cookieResetButton               : false,
-            cookieOverlayEnabled            : false, // don't want a discreet toolbar? Fine, set this to true
-            cookiePolicyLink                : '/privacy-policy/', // if applicable, enter the link to your privacy policy here...
-            cookieMessage                   : 'We use cookies on this website, you can <a href="{{cookiePolicyLink}}" title="read about our cookies">read about them here</a>. To use the website as intended please...',
-            cookieAnalyticsMessage          : 'We use cookies, just to track visits to our website, we store no personal details.',
-            cookieErrorMessage              : "We\'re sorry, this feature places cookies in your browser and has been disabled. <br>To continue using this functionality, please",
-            cookieWhatAreTheyLink           : "http://www.allaboutcookies.org/",
-            cookieDisable                   : '',
-            cookieExpires                   : 365,
-            cookieAcceptButtonText          : "ACCEPT COOKIES",
-            cookieDeclineButtonText         : "DECLINE COOKIES",
-            cookieResetButtonText           : "RESET COOKIES FOR THIS WEBSITE",
-            cookieWhatAreLinkText           : "What are cookies?",
-            cookieNotificationLocationBottom: false, // top or bottom - they are your only options, so true for bottom, false for top
-            cookiePolicyPage                : false,
-            cookiePolicyPageMessage         : 'Please read the information below and then choose from the following options',
-            cookieDiscreetLink              : false,
-            cookieDiscreetReset             : false,
-            cookieDiscreetLinkText          : "Cookies?",
-            cookieDiscreetPosition          : "topleft", //options: topleft, topright, bottomleft, bottomright
-            cookieNoMessage                 : false, // change to true hide message from all pages apart from your policy page
-            cookieDomain                    : "",
-            cookieAcceptName                : 'cc_cookie_accept',
-            cookieAcceptValue               : 'cc_cookie_accept',
-            cookieDeclineName               : 'cc_cookie_decline',
-            cookieDeclineValue              : 'cc_cookie_decline'
-            cookieClickableOverlay			: false,
-			cookieClickableDiv				: "",
-			cookieClickAnyLink				: false,
-			cookieCuttrCompatible			: false
-        };
+    "use strict";
+    var defaults  = {
+        cookieCutter: false, // you'd like to enable the div/section/span etc. hide feature? change this to true
+        cookieCutterDeclineOnly: false, // you'd like the CookieCutter to only hide when someone has clicked declined set this to true
+        cookieAnalytics: true, // just using a simple analytics package? change this to true
+        cookieDeclineButton: false, // this will disable non essential cookies
+        cookieAcceptButton: true, // this will disable non essential cookies
+        cookieResetButton: false,
+        cookieOverlayEnabled: false, // don't want a discreet toolbar? Fine, set this to true
+        cookiePolicyLink: '/privacy-policy/', // if applicable, enter the link to your privacy policy here...
+        cookieMessage: 'We use cookies on this website, you can <a href="{{cookiePolicyLink}}" title="read about our cookies">read about them here</a>. To use the website as intended please...',
+        cookieAnalyticsMessage: 'We use cookies, just to track visits to our website, we store no personal details.',
+        cookieErrorMessage: "We\'re sorry, this feature places cookies in your browser and has been disabled. <br>To continue using this functionality, please",
+        cookieWhatAreTheyLink: "http://www.allaboutcookies.org/",
+        cookieDisable: '',
+        cookieExpires: 365,
+        cookieAcceptButtonText: "ACCEPT COOKIES",
+        cookieDeclineButtonText: "DECLINE COOKIES",
+        cookieResetButtonText: "RESET COOKIES FOR THIS WEBSITE",
+        cookieWhatAreLinkText: "What are cookies?",
+        cookieNotificationLocationBottom: false, // top or bottom - they are your only options, so true for bottom, false for top
+        cookiePolicyPage: false,
+        cookiePolicyPageMessage: 'Please read the information below and then choose from the following options',
+        cookieDiscreetLink: false,
+        cookieDiscreetReset: false,
+        cookieDiscreetLinkText: "Cookies?",
+        cookieDiscreetPosition: "topleft", //options: topleft, topright, bottomleft, bottomright
+        cookieNoMessage: false, // change to true hide message from all pages apart from your policy page
+        cookieDomain: "",
+        cookieAcceptName: 'cc_cookie_accept',
+        cookieAcceptValue: 'cc_cookie_accept',
+        cookieDeclineName: 'cc_cookie_decline',
+        cookieDeclineValue: 'cc_cookie_decline',
+        cookieClickableOverlay: false,
+        cookieClickableDiv: "",
+        cookieClickAnyLink: false,
+        cookieCuttrCompatible: true
+    };
+    $.cuttACookie = function (o) {
 
-        options               = $.extend({}, defaults, options);
-        options.cookieMessage = options.cookieMessage.replace('{{cookiePolicyLink}}', options.cookiePolicyLink);
-
-        // cookie identifier
-        var $cookieAccepted = $.cookie(options.cookieAcceptName)  == options.cookieAcceptValue;
-        var $cookieDeclined = $.cookie(options.cookieDeclineName) == options.cookieDeclineValue;
-
-        $.cookieAccepted = function () { return $cookieAccepted; };
-        $.cookieDeclined = function () { return $cookieDeclined; };
-
-        //  buttons html-string, etc
-        var cookieAccept  = '',
+        var options = $.extend({}, defaults, o), 
+            $cookieAccepted = $.cookie(options.cookieAcceptName) == options.cookieAcceptValue, 
+            $cookieDeclined = $.cookie(options.cookieDeclineName) == options.cookieDeclineValue,
+            cookieAccept  = '',
             cookieDecline = '',
             cookieOverlay = '';
 
+        options.cookieMessage = options.cookieMessage.replace('{{cookiePolicyLink}}', options.cookiePolicyLink);
+
+        // cookie identifier
+        $.cookieAccepted = function () { return $cookieAccepted; };
+        $.cookieDeclined = function () { return $cookieDeclined; };
+
         var acceptCookies = function(elmt)
-		{
+        {
 			if(!options.cookieClickAnyLink)
 			{
 				elmt.preventDefault();
@@ -109,55 +108,82 @@
             });
         };
 
-        if (options.cookieAcceptButton)  // write cookie accept button
-            cookieAccept  = ' <a href="#accept" class="cc-cookie-accept">' + options.cookieAcceptButtonText + '</a> ';
+		if (options.cookieAcceptButton)  // write cookie accept button
+		{
+            cookieAccept = ' <a href="#accept" class="cc-cookie-accept">' + options.cookieAcceptButtonText + '</a> ';
+		}
 
 
-        if (options.cookieDeclineButton) // write cookie decline button
+		if (options.cookieDeclineButton) // write cookie decline button
+		{
             cookieDecline = ' <a href="#decline" class="cc-cookie-decline">' + options.cookieDeclineButtonText + '</a> ';
+		}
 
         // write extra class for overlay
-        if (options.cookieOverlayEnabled)
+		if (options.cookieOverlayEnabled) {
             cookieOverlay = ' cc-overlay';
+        }
+
+        var setDiscrete = function () {
+            if (options.cookieDiscreetPosition == "topleft") {
+                $('div.cc-cookies').css("top", "0");
+                $('div.cc-cookies').css("left", "0");
+            }
+            if (options.cookieDiscreetPosition == "topright") {
+                $('div.cc-cookies').css("top", "0");
+                $('div.cc-cookies').css("right", "0");
+            }
+            if (options.cookieDiscreetPosition == "bottomleft") {
+                $('div.cc-cookies').css("bottom", "0");
+                $('div.cc-cookies').css("left", "0");
+            }
+            if (options.cookieDiscreetPosition == "bottomright") {
+                $('div.cc-cookies').css("bottom", "0");
+                $('div.cc-cookies').css("right", "0");
+            }
+		};
+
 
         // to prepend or append, that is the question?
         var appOrPre = (options.cookieNotificationLocationBottom         ||
                         options.cookieDiscreetPosition == "bottomright"  ||
                         options.cookieDiscreetPosition == "bottomleft") ? 'append' : 'prepend';
-
-        if ($cookieAccepted || $cookieDeclined) {
-            // write cookie reset button
-            if (options.cookieResetButton && options.cookieDiscreetReset) {
-                $('body')[appOrPre]('<div class="cc-cookies cc-discreet"><a href="#" class="cc-cookie-reset">' + options.cookieResetButtonText + '</a></div>');
-                setDiscrete(options.cookieDiscreetPosition);
-            } else if (options.cookieResetButton) {
-                $('body')[appOrPre]('<div class="cc-cookies"><a href="#" class="cc-cookie-reset">' + options.cookieResetButtonText + '</a></div>');
+        if (!(options.cookieNoMessage && !options.cookiePolicyPage)) {
+            if ($cookieAccepted || $cookieDeclined) {
+                // write cookie reset button
+                if (options.cookieResetButton && options.cookieDiscreetReset) {
+                    $('body')[appOrPre]('<div class="cc-cookies cc-discreet"><a href="#" class="cc-cookie-reset">' + options.cookieResetButtonText + '</a></div>');
+                    setDiscrete();
+                } else if (options.cookieResetButton) {
+                    $('body')[appOrPre]('<div class="cc-cookies"><a href="#" class="cc-cookie-reset">' + options.cookieResetButtonText + '</a></div>');
+                }
+            } else if (options.cookieDiscreetLink && !options.cookiePolicyPage) { // show discreet link
+                $('body')[appOrPre]('<div class="cc-cookies cc-discreet"><a href="' + options.cookiePolicyLink + '" title="' + options.cookieDiscreetLinkText + '">' + options.cookieDiscreetLinkText + '</a></div>');
+                setDiscrete();
+            } else if (options.cookieAnalytics) { // show analytics overlay
+                $('body')[appOrPre]('<div class="cc-cookies' + cookieOverlay + '">' + options.cookieAnalyticsMessage + cookieAccept + cookieDecline + '<a rel="external" href="' + options.cookieWhatAreTheyLink + '">' + options.cookieWhatAreLinkText + '</a></div>');
             }
-        } else if (options.cookieNoMessage && !options.cookiePolicyPage) {
-            // show no link on any pages APART from the policy page
-        } else if (options.cookieDiscreetLink && !options.cookiePolicyPage) { // show discreet link
-            $('body')[appOrPre]('<div class="cc-cookies cc-discreet"><a href="' + options.cookiePolicyLink + '" title="' + options.cookieDiscreetLinkText + '">' + options.cookieDiscreetLinkText + '</a></div>');
-            setDiscrete(options.cookieDiscreetPosition);
-        } else if (options.cookieAnalytics) { // show analytics overlay
-            $('body')[appOrPre]('<div class="cc-cookies' + cookieOverlay + '">' + options.cookieAnalyticsMessage + cookieAccept + cookieDecline + '<a rel="external" href="' + options.cookieWhatAreTheyLink + '">' + options.cookieWhatAreLinkText + '</a></div>');
+            else if (options.cookiePolicyPage) { // show policy page overlay
+                $('body')[appOrPre]('<div class="cc-cookies' + cookieOverlay + '">' + options.cookiePolicyPageMessage + " " + ' <a href="#accept" class="cc-cookie-accept">' + options.cookieAcceptButtonText + '</a> ' + ' <a href="#decline" class="cc-cookie-decline">' + options.cookieDeclineButtonText + '</a> ' + '</div>');
+            }
+            else if (!options.cookieAnalytics && !options.cookieDiscreetLink) { // show privacy policy option
+                $('body')[appOrPre]('<div class="cc-cookies' + cookieOverlay + '">' + options.cookieMessage + cookieAccept + cookieDecline + '</div>');
+            }   
         }
-
-        if (options.cookiePolicyPage) { // show policy page overlay
-            $('body')[appOrPre]('<div class="cc-cookies' + cookieOverlay + '">' + options.cookiePolicyPageMessage + " " + ' <a href="#accept" class="cc-cookie-accept">' + options.cookieAcceptButtonText + '</a> ' + ' <a href="#decline" class="cc-cookie-decline">' + options.cookieDeclineButtonText + '</a> ' + '</div>');
-        } else if (!options.cookieAnalytics && !options.cookieDiscreetLink) { // show privacy policy option
-            $('body')[appOrPre]('<div class="cc-cookies' + cookieOverlay + '">' + options.cookieMessage + cookieAccept + cookieDecline + '</div>');
-        }
+        
 
         if ((options.cookieCutter && !options.cookieCutterDeclineOnly && ($cookieDeclined || !$cookieAccepted)) ||
-            (options.cookieCutter && options.cookieCutterDeclineOnly && $cookieDeclined)
-        ) $(cookieDisable).html('<div class="cc-cookies-error">' + options.cookieErrorMessage + ' <a href="#accept" class="cc-cookie-accept">' + options.cookieAcceptButtonText + '</a> ' + '</div>');
+            (options.cookieCutter && options.cookieCutterDeclineOnly && $cookieDeclined)){
+            $(options.cookieDisable).html('<div class="cc-cookies-error">' + options.cookieErrorMessage + ' <a href="#accept" class="cc-cookie-accept">' + options.cookieAcceptButtonText + '</a> ' + '</div>');
+        }
 
         // if bottom is true, switch div to bottom if not in discreet mode
         if ((options.cookieNotificationLocationBottom && !options.cookieDiscreetLink) ||
-            (options.cookieNotificationLocationBottom && options.cookieDiscreetLink && options.cookiePolicyPage)
-        ) $('div.cc-cookies').css({top: 'auto', bottom: 0});
+            (options.cookieNotificationLocationBottom && options.cookieDiscreetLink && options.cookiePolicyPage)) {
+            $('div.cc-cookies').css({ top: 'auto', bottom: 0 });
+        }
 
-		if(options.cookieClickableOverlay && !$cookieAccepted)
+		if(options.cookieClickableOverlay && (!$cookieAccepted || $cookieDeclined))
 		{
 			if(options.cookieClickableDiv === "")
 			{
@@ -206,7 +232,8 @@
     };
 
     // drop-in replacement compatibility for the cookieCuttr plugin (from which cuttACookie was forked)
-    if (options.cookieCuttrCompatible && !$.cookieCuttr)
+    if (defaults.cookieCuttrCompatible && !$.cookieCuttr)
+    { 
         $.cookieCuttr = $.cuttACookie;
-
+    }
 })(jQuery);
